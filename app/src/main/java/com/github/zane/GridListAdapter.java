@@ -10,9 +10,11 @@ import androidx.recyclerview.widget.RecyclerView;
 public class GridListAdapter extends RecyclerView.Adapter<GridListViewHolder> {
 
     private final int columnWidth;
+    private final int columnCount;
 
-    public GridListAdapter(int columnWidth) {
+    public GridListAdapter(int columnWidth, int columnCount) {
         this.columnWidth = columnWidth;
+        this.columnCount = columnCount;
     }
 
     @NonNull
@@ -25,7 +27,7 @@ public class GridListAdapter extends RecyclerView.Adapter<GridListViewHolder> {
     @SuppressWarnings("SuspiciousNameCombination")
     @Override
     public void onBindViewHolder(@NonNull GridListViewHolder holder, int position) {
-        ViewGroup.LayoutParams layoutParams =  holder.view2.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams = holder.view2.getLayoutParams();
         if (layoutParams != null) {
             layoutParams.height = columnWidth;
             holder.view2.setLayoutParams(layoutParams);
@@ -34,6 +36,6 @@ public class GridListAdapter extends RecyclerView.Adapter<GridListViewHolder> {
 
     @Override
     public int getItemCount() {
-        return 15;
+        return this.columnCount * this.columnCount;
     }
 }

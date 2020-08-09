@@ -17,7 +17,7 @@ import org.zane.commonutils.DimenUtils;
 
 public class GridListFragment extends Fragment {
 
-    private final int columnCount = 3;
+    private final int columnCount = 4;
     private final int gap = DimenUtils.dp2px(8);
     private final int edgeGap = DimenUtils.dp2px(12);
     private int columnWidth;
@@ -49,7 +49,7 @@ public class GridListFragment extends Fragment {
     }
 
     private void setupList(RecyclerView view, boolean useOldDecoration) {
-        view.setAdapter(new GridListAdapter(this.columnWidth));
+        view.setAdapter(new GridListAdapter(this.columnWidth, columnCount));
         view.setLayoutManager(new GridLayoutManager(requireContext(), columnCount));
         if (useOldDecoration) {
             view.addItemDecoration(oldDecoration); //旧实现
