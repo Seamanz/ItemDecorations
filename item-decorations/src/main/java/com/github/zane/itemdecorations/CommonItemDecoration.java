@@ -150,8 +150,10 @@ public class CommonItemDecoration extends RecyclerView.ItemDecoration {
         int itemPosition = parent.getChildAdapterPosition(view);
         if (layoutManager.getOrientation() == LinearLayoutManager.VERTICAL) {
 
+            if (layoutManager.getLayoutDirection() == ViewCompat.LAYOUT_DIRECTION_RTL) {
+                columnIndex = columnCount - 1 - columnIndex;
+            }
             setupVerticalGridItemOffset(outRect, columnCount, columnIndex, itemCount, itemPosition);
-
         } else {
         }
     }
