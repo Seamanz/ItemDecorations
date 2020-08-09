@@ -150,6 +150,7 @@ public class CommonItemDecoration extends RecyclerView.ItemDecoration {
         int itemPosition = parent.getChildAdapterPosition(view);
         if (layoutManager.getOrientation() == LinearLayoutManager.VERTICAL) {
 
+            //Fix support RTL [gridview - Android Recyclerview GridLayoutManager column spacing - Stack Overflow](https://stackoverflow.com/questions/28531996/android-recyclerview-gridlayoutmanager-column-spacing/28533234)
             if (layoutManager.getLayoutDirection() == ViewCompat.LAYOUT_DIRECTION_RTL) {
                 columnIndex = columnCount - 1 - columnIndex;
             }
