@@ -5,48 +5,49 @@ import android.graphics.Rect;
 import android.view.View;
 
 import androidx.annotation.ColorInt;
-import androidx.annotation.Dimension;
 import androidx.annotation.NonNull;
+import androidx.annotation.Px;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import org.zane.commonutils.DimenUtils;
-
-import static androidx.annotation.Dimension.DP;
-
+/**
+ * 算法:<br/>
+ * 中间间隔 GapSize, 四围间隔 EdgeGapSize, 列数 ColumnCount, 列索引 ColumnIndex, 比例 Ratio=EdgeGapSize/GapSize, 递增量 Delta=(2*Ratio-1)*GapSize/ColumnCount<br/>
+ * Left = Ratio*GapSize - ColumnIndex*Delta <br/>
+ * Right = Ratio*GapSize - (ColumnCount-(ColumnIndex+1))*Delta <br/>
+ */
 public class CommonItemDecoration extends RecyclerView.ItemDecoration {
 
-    @Dimension(unit = DP)
-    private final float gapSize;
-    @Dimension(unit = DP)
-    private final float edgeGapSize;
+    @Px
+    private final int gapSize;
+    @Px
+    private final int edgeGapSize;
     @ColorInt
     private final int gapColor;
+    private final double ratio;
 
-    private final int gapSizePx;
-    private final int edgeGapSizePx;
-
-    public CommonItemDecoration(@Dimension(unit = DP) float gapSize) {
+    public CommonItemDecoration(@Px int gapSize) {
         this(gapSize, 0);
     }
 
-    public CommonItemDecoration(@Dimension(unit = DP) float gapSize,
-                                @Dimension(unit = DP) float edgeGapSize) {
+    public CommonItemDecoration(@Px int gapSize,
+                                @Px int edgeGapSize) {
         this(gapSize, edgeGapSize, Color.TRANSPARENT);
     }
 
-    public CommonItemDecoration(@Dimension(unit = DP) float gapSize,
-                                @Dimension(unit = DP) float edgeGapSize,
+    public CommonItemDecoration(@Px int gapSize,
+                                @Px int edgeGapSize,
                                 @ColorInt int gapColor) {
+        if (gapSize <= 0) {
+            throw new IllegalArgumentException("gapSize must be greater than 0 !");
+        }
         this.gapSize = gapSize;
         this.edgeGapSize = edgeGapSize;
         this.gapColor = gapColor;
-
-        this.gapSizePx = DimenUtils.dp2px(gapSize);
-        this.edgeGapSizePx = DimenUtils.dp2px(edgeGapSize);
+        this.ratio = (edgeGapSize * 1.0) / (gapSize * 1.0);
     }
 
     @Override
@@ -81,8 +82,8 @@ public class CommonItemDecoration extends RecyclerView.ItemDecoration {
         int left, top, right, bottom;
 
         if (layoutManager.getOrientation() == LinearLayoutManager.VERTICAL) {
-            left = this.edgeGapSizePx;
-            right = this.edgeGapSizePx;
+            left = this.edgeGapSize;
+            right = this.edgeGapSize;
 
             if (isRtl) {
                 int temp = left;
@@ -91,46 +92,46 @@ public class CommonItemDecoration extends RecyclerView.ItemDecoration {
             }
 
             if (position == 0) {
-                top = this.edgeGapSizePx;
+                top = this.edgeGapSize;
             } else {
                 top = 0;
             }
 
-            bottom = this.gapSizePx;
+            bottom = this.gapSize;
 
             if (position == itemCount - 1) {
-                bottom = this.edgeGapSizePx;
+                bottom = this.edgeGapSize;
             }
 
         } else {
-            top = this.edgeGapSizePx;
-            bottom = this.edgeGapSizePx;
+            top = this.edgeGapSize;
+            bottom = this.edgeGapSize;
 
             if (isRtl) {
 
                 if (position == itemCount - 1) {
-                    left = this.edgeGapSizePx;
+                    left = this.edgeGapSize;
                 } else {
-                    left = this.gapSizePx;
+                    left = this.gapSize;
                 }
 
                 if (position == 0) {
-                    right = this.edgeGapSizePx;
+                    right = this.edgeGapSize;
                 } else {
                     right = 0;
                 }
 
             } else {
                 if (position == 0) {
-                    left = this.edgeGapSizePx;
+                    left = this.edgeGapSize;
                 } else {
                     left = 0;
                 }
 
-                right = this.gapSizePx;
+                right = this.gapSize;
 
                 if (position == itemCount - 1) {
-                    right = this.edgeGapSizePx;
+                    right = this.edgeGapSize;
                 }
             }
         }
@@ -142,7 +143,17 @@ public class CommonItemDecoration extends RecyclerView.ItemDecoration {
                                       RecyclerView parent,
                                       RecyclerView.State state,
                                       GridLayoutManager layoutManager) {
+        GridLayoutManager.LayoutParams params = (GridLayoutManager.LayoutParams) view.getLayoutParams();
+        int columnIndex = params.getSpanIndex(); //当前项在第几列
+        int columnCount = layoutManager.getSpanCount(); //总列数
+        int itemCount = state.getItemCount();
+        int itemPosition = parent.getChildAdapterPosition(view);
+        if (layoutManager.getOrientation() == LinearLayoutManager.VERTICAL) {
 
+            setupVerticalGridItemOffset(outRect, columnCount, columnIndex, itemCount, itemPosition);
+
+        } else {
+        }
     }
 
     private void setupStaggeredItemOffsets(Rect outRect,
@@ -151,5 +162,55 @@ public class CommonItemDecoration extends RecyclerView.ItemDecoration {
                                            RecyclerView.State state,
                                            StaggeredGridLayoutManager layoutManager) {
 
+        StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) view.getLayoutParams();
+        int columnIndex = params.getSpanIndex(); //当前项在第几列
+        int columnCount = layoutManager.getSpanCount(); //总列数
+        int itemCount = state.getItemCount();
+        int itemPosition = parent.getChildAdapterPosition(view);
+        if (layoutManager.getOrientation() == LinearLayoutManager.VERTICAL) {
+            setupVerticalGridItemOffset(outRect, columnCount, columnIndex, itemCount, itemPosition);
+        } else {
+
+        }
+    }
+
+    private boolean isFirstRow(int columnCount, int adapterPosition) {
+        return adapterPosition < columnCount;
+    }
+
+    private boolean isLastRow(int itemCount, int columnCount, int adapterPosition) {
+        //最后一行
+        int remainder = itemCount % columnCount; //取余计算最一行个数
+        if (remainder == 0) {
+            remainder = columnCount;
+        }
+        return adapterPosition >= (itemCount - remainder);
+    }
+
+    private void setupVerticalGridItemOffset(@NonNull Rect outRect,
+                                             int columnCount,
+                                             int columnIndex,
+                                             int itemCount,
+                                             int itemPosition) {
+        //算法:
+        //中间间隔 GapSize, 四围间隔 EdgeGapSize, 列数 ColumnCount, 列索引 ColumnIndex,
+        //比例 Ratio=EdgeGapSize/GapSize, 递增量 Delta=(2*Ratio-1)*GapSize/ColumnCount
+        //Left = Ratio*GapSize - ColumnIndex*Delta
+        //Right = Ratio*GapSize - (ColumnCount-(ColumnIndex+1))*Delta
+
+        final double delta = (2 * ratio - 1) * this.gapSize / columnCount; //递增量
+        outRect.left = (int) (this.edgeGapSize - columnIndex * delta);
+        outRect.right = (int) (this.edgeGapSize - (columnCount - (columnIndex + 1)) * delta);
+
+        if (isFirstRow(columnCount, itemPosition)) {    //第一行
+            outRect.top = this.edgeGapSize;
+        } else {
+            outRect.top = this.gapSize;
+        }
+
+        //最后一行
+        if (isLastRow(itemCount, columnCount, itemPosition)) {
+            outRect.bottom = this.edgeGapSize;
+        }
     }
 }
