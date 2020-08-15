@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainPage">
+    <fragment
+        android:id="@+id/mainPage"
+        android:name="com.github.zane.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_mainPage_to_gridListPage"
+            app:destination="@id/gridListPage" />
+        <action
+            android:id="@+id/action_mainPage_to_staggeredGridListPage"
+            app:destination="@id/staggeredGridListPage" />
+    </fragment>
+    <fragment
+        android:id="@+id/gridListPage"
+        android:name="com.github.zane.GridListFragment"
+        android:label="@string/grid_list"
+        tools:layout="@layout/fragment_grid_list" />
+    <fragment
+        android:id="@+id/staggeredGridListPage"
+        android:name="com.github.zane.StaggeredGridListFragment"
+        android:label="@string/staggered_grid_list" />
+</navigation>

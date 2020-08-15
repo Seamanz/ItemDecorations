@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">البندديكورات</string>
+    <string name="grid_list">قائمة الشبكة</string>
+    <string name="staggered_grid_list">قائمة الشبكة المتداخلة</string>
+    <string name="about">حول</string>
+</resources>

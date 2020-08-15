@@ -7,12 +7,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class GridListAdapter extends RecyclerView.Adapter<GridListViewHolder> {
+public class StaggeredGridListAdapter extends RecyclerView.Adapter<GridListViewHolder> {
 
     private final int columnWidth;
     private final int columnCount;
 
-    public GridListAdapter(int columnWidth, int columnCount) {
+    public StaggeredGridListAdapter(int columnWidth, int columnCount) {
         this.columnWidth = columnWidth;
         this.columnCount = columnCount;
     }
@@ -27,12 +27,12 @@ public class GridListAdapter extends RecyclerView.Adapter<GridListViewHolder> {
     @SuppressWarnings("SuspiciousNameCombination")
     @Override
     public void onBindViewHolder(@NonNull GridListViewHolder holder, int position) {
-        holder.bindViewHeight(columnWidth);
+        holder.bindViewHeight(position % 2 == 0 ? columnWidth : (int)(columnWidth * 1.5));
         holder.indexView.setText(String.valueOf(position + 1));
     }
 
     @Override
     public int getItemCount() {
-        return this.columnCount * this.columnCount;
+        return this.columnCount * 10;
     }
 }

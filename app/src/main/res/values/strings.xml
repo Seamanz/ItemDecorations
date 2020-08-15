@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">ItemDecorations</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="grid_list">Grid List</string>
+    <string name="staggered_grid_list">Staggered Grid List</string>
+    <string name="switch_rtl" translatable="false">Switch_RTL</string>
+    <string name="about">About</string>
+
 </resources>
