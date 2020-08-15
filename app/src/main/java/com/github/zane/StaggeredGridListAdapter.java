@@ -24,7 +24,6 @@ public class StaggeredGridListAdapter extends RecyclerView.Adapter<GridListViewH
         return new GridListViewHolder(itemView);
     }
 
-    @SuppressWarnings("SuspiciousNameCombination")
     @Override
     public void onBindViewHolder(@NonNull GridListViewHolder holder, int position) {
         holder.bindViewHeight(position % 2 == 0 ? columnWidth : (int)(columnWidth * 1.5));
@@ -33,6 +32,6 @@ public class StaggeredGridListAdapter extends RecyclerView.Adapter<GridListViewH
 
     @Override
     public int getItemCount() {
-        return this.columnCount * 10;
+        return this.columnCount * 30;
     }
 }
