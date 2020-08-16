@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class GridListViewHolder extends RecyclerView.ViewHolder {
     public View view2;
     public TextView indexView;
-    private int viewHeight;
+    private int viewSize;
 
     public GridListViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -18,12 +18,16 @@ public class GridListViewHolder extends RecyclerView.ViewHolder {
         indexView = itemView.findViewById(R.id.tv_index);
     }
 
-    public void bindViewHeight(int viewHeight) {
-        if (this.viewHeight != viewHeight) {
-            this.viewHeight = viewHeight;
+    public void bindViewSize(int viewSize, boolean isHorizontal) {
+        if (this.viewSize != viewSize) {
+            this.viewSize = viewSize;
             ViewGroup.LayoutParams layoutParams = view2.getLayoutParams();
             if (layoutParams != null) {
-                layoutParams.height = viewHeight;
+                if (isHorizontal) {
+                    layoutParams.width = viewSize;
+                } else {
+                    layoutParams.height = viewSize;
+                }
                 view2.setLayoutParams(layoutParams);
             }
         }

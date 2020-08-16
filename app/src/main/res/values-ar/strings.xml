@@ -3,5 +3,6 @@
     <string name="app_name">البندديكورات</string>
     <string name="grid_list">قائمة الشبكة</string>
     <string name="staggered_grid_list">قائمة الشبكة المتداخلة</string>
+    <string name="staggered_grid_list2">قائمة الشبكة المتداخلة2</string>
     <string name="about">حول</string>
 </resources>

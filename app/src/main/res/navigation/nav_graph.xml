@@ -24,5 +24,10 @@
     <fragment
         android:id="@+id/staggeredGridListPage"
         android:name="com.github.zane.StaggeredGridListFragment"
-        android:label="@string/staggered_grid_list" />
+        android:label="@string/staggered_grid_list" >
+        <argument
+            android:name="is_horizontal"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </fragment>
 </navigation>

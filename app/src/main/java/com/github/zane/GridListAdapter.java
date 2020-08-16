@@ -27,7 +27,7 @@ public class GridListAdapter extends RecyclerView.Adapter<GridListViewHolder> {
     @SuppressWarnings("SuspiciousNameCombination")
     @Override
     public void onBindViewHolder(@NonNull GridListViewHolder holder, int position) {
-        holder.bindViewHeight(columnWidth);
+        holder.bindViewSize(columnWidth, false);
         holder.indexView.setText(String.valueOf(position + 1));
     }
 

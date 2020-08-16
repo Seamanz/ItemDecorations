@@ -2,6 +2,7 @@
     <string name="app_name">ItemDecorations</string>
     <string name="grid_list">Grid List</string>
     <string name="staggered_grid_list">Staggered Grid List</string>
+    <string name="staggered_grid_list2">Staggered Grid List2</string>
     <string name="switch_rtl" translatable="false">Switch_RTL</string>
     <string name="about">About</string>
 

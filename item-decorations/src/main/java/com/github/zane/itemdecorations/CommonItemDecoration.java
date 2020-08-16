@@ -67,7 +67,10 @@ public class CommonItemDecoration extends RecyclerView.ItemDecoration {
         } else if (layoutManager instanceof LinearLayoutManager) {
             setupLinearItemOffsets(outRect, view, parent, state, ((LinearLayoutManager) layoutManager));
         }
+    }
 
+    private boolean isRtl(RecyclerView.LayoutManager layoutManager) {
+        return layoutManager.getLayoutDirection() == ViewCompat.LAYOUT_DIRECTION_RTL;
     }
 
     private void setupLinearItemOffsets(Rect outRect,
@@ -76,7 +79,7 @@ public class CommonItemDecoration extends RecyclerView.ItemDecoration {
                                         RecyclerView.State state,
                                         LinearLayoutManager layoutManager) {
 
-        boolean isRtl = layoutManager.getLayoutDirection() == ViewCompat.LAYOUT_DIRECTION_RTL;
+        boolean isRtl = isRtl(layoutManager);
         int itemCount = state.getItemCount();
         int position = parent.getChildAdapterPosition(view);
         int left, top, right, bottom;
@@ -144,6 +147,7 @@ public class CommonItemDecoration extends RecyclerView.ItemDecoration {
                                       RecyclerView.State state,
                                       GridLayoutManager layoutManager) {
         GridLayoutManager.LayoutParams params = (GridLayoutManager.LayoutParams) view.getLayoutParams();
+        boolean isRtl = isRtl(layoutManager);
         int columnIndex = params.getSpanIndex(); //当前项在第几列
         int columnCount = layoutManager.getSpanCount(); //总列数
         int itemCount = state.getItemCount();
@@ -151,11 +155,12 @@ public class CommonItemDecoration extends RecyclerView.ItemDecoration {
         if (layoutManager.getOrientation() == LinearLayoutManager.VERTICAL) {
 
             //Fix support RTL [gridview - Android Recyclerview GridLayoutManager column spacing - Stack Overflow](https://stackoverflow.com/questions/28531996/android-recyclerview-gridlayoutmanager-column-spacing/28533234)
-            if (layoutManager.getLayoutDirection() == ViewCompat.LAYOUT_DIRECTION_RTL) {
+            if (isRtl) {
                 columnIndex = columnCount - 1 - columnIndex;
             }
-            setupVerticalGridItemOffset(outRect, columnCount, columnIndex, itemCount, itemPosition);
+            setupVerticalGridItemOffset(outRect, columnCount, columnIndex, itemCount, itemPosition, false);
         } else {
+            setupHorizontalGridItemOffset(outRect, columnCount, columnIndex, itemCount, itemPosition, isRtl, false);
         }
     }
 
@@ -166,14 +171,15 @@ public class CommonItemDecoration extends RecyclerView.ItemDecoration {
                                            StaggeredGridLayoutManager layoutManager) {
 
         StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) view.getLayoutParams();
+        boolean isRtl = isRtl(layoutManager);
         int columnIndex = params.getSpanIndex(); //当前项在第几列
         int columnCount = layoutManager.getSpanCount(); //总列数
         int itemCount = state.getItemCount();
         int itemPosition = parent.getChildAdapterPosition(view);
         if (layoutManager.getOrientation() == LinearLayoutManager.VERTICAL) {
-            setupVerticalGridItemOffset(outRect, columnCount, columnIndex, itemCount, itemPosition);
+            setupVerticalGridItemOffset(outRect, columnCount, columnIndex, itemCount, itemPosition, true);
         } else {
-
+            setupHorizontalGridItemOffset(outRect, columnCount, columnIndex, itemCount, itemPosition, isRtl, true);
         }
     }
 
@@ -184,6 +190,7 @@ public class CommonItemDecoration extends RecyclerView.ItemDecoration {
     private boolean isLastRow(int itemCount, int columnCount, int adapterPosition) {
         //最后一行
         int remainder = itemCount % columnCount; //取余计算最一行个数
+
         if (remainder == 0) {
             remainder = columnCount;
         }
@@ -194,7 +201,9 @@ public class CommonItemDecoration extends RecyclerView.ItemDecoration {
                                              int columnCount,
                                              int columnIndex,
                                              int itemCount,
-                                             int itemPosition) {
+                                             int itemPosition,
+                                             boolean isStaggered
+    ) {
         //算法:
         //中间间隔 GapSize, 四围间隔 EdgeGapSize, 列数 ColumnCount, 列索引 ColumnIndex,
         //比例 Ratio=EdgeGapSize/GapSize, 递增量 Delta=(2*Ratio-1)*GapSize/ColumnCount
@@ -205,15 +214,49 @@ public class CommonItemDecoration extends RecyclerView.ItemDecoration {
         outRect.left = (int) (this.edgeGapSize - columnIndex * delta);
         outRect.right = (int) (this.edgeGapSize - (columnCount - (columnIndex + 1)) * delta);
 
-        if (isFirstRow(columnCount, itemPosition)) {    //第一行
+        if (isFirstRow(columnCount, itemPosition)) { //第一行
             outRect.top = this.edgeGapSize;
         } else {
-            outRect.top = this.gapSize;
+            outRect.top = 0;
         }
 
-        //最后一行
-        if (isLastRow(itemCount, columnCount, itemPosition)) {
+        //最后一行(注：这个算法不适用交错布局)
+        if (!isStaggered && isLastRow(itemCount, columnCount, itemPosition)) {
             outRect.bottom = this.edgeGapSize;
+        } else {
+            outRect.bottom = this.gapSize;
+        }
+    }
+
+    private void setupHorizontalGridItemOffset(Rect outRect,
+                                               int columnCount,
+                                               int columnIndex,
+                                               int itemCount,
+                                               int itemPosition,
+                                               boolean isRtl,
+                                               boolean isStaggered) {
+
+        final double delta = (2 * ratio - 1) * this.gapSize / columnCount; //递增量
+        outRect.top = (int) (this.edgeGapSize - columnIndex * delta);
+        outRect.bottom = (int) (this.edgeGapSize - (columnCount - (columnIndex + 1)) * delta);
+
+        if (isFirstRow(columnCount, itemPosition)) { //第一列
+            outRect.left = this.edgeGapSize;
+        } else {
+            outRect.left = 0;
+        }
+
+        //最后一列(注：这个算法不适用交错布局)
+        if (!isStaggered && isLastRow(itemCount, columnCount, itemPosition)) {
+            outRect.right = this.edgeGapSize;
+        } else {
+            outRect.right = this.gapSize;
+        }
+
+        if (isRtl) {
+            int left = outRect.left;
+            outRect.left = outRect.right;
+            outRect.right = left;
         }
     }
 }

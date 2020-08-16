@@ -42,5 +42,15 @@ public class MainFragment extends Fragment {
                         .navigate(R.id.action_mainPage_to_staggeredGridListPage);
             }
         });
+
+        view.findViewById(R.id.btn_staggered_grid_list2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavHostFragment.findNavController(MainFragment.this)
+                        .navigate(MainFragmentDirections
+                                .actionMainPageToStaggeredGridListPage()
+                                .setIsHorizontal(true));
+            }
+        });
     }
 }
