@@ -88,56 +88,41 @@ public class CommonItemDecoration extends RecyclerView.ItemDecoration {
             left = this.edgeGapSize;
             right = this.edgeGapSize;
 
-            if (isRtl) {
-                int temp = left;
-                left = right;
-                right = temp;
-            }
-
             if (position == 0) {
                 top = this.edgeGapSize;
             } else {
                 top = 0;
             }
 
-            bottom = this.gapSize;
-
             if (position == itemCount - 1) {
                 bottom = this.edgeGapSize;
+            } else {
+                bottom = this.gapSize;
             }
 
         } else {
             top = this.edgeGapSize;
             bottom = this.edgeGapSize;
 
-            if (isRtl) {
-
-                if (position == itemCount - 1) {
-                    left = this.edgeGapSize;
-                } else {
-                    left = this.gapSize;
-                }
-
-                if (position == 0) {
-                    right = this.edgeGapSize;
-                } else {
-                    right = 0;
-                }
-
+            if (position == 0) {
+                left = this.edgeGapSize;
             } else {
-                if (position == 0) {
-                    left = this.edgeGapSize;
-                } else {
-                    left = 0;
-                }
+                left = 0;
+            }
 
+            if (position == itemCount - 1) {
+                right = this.edgeGapSize;
+            } else {
                 right = this.gapSize;
-
-                if (position == itemCount - 1) {
-                    right = this.edgeGapSize;
-                }
             }
         }
+
+        if (isRtl) {
+            int temp = left;
+            left = right;
+            right = temp;
+        }
+
         outRect.set(left, top, right, bottom);
     }
 

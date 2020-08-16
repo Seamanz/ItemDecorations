@@ -70,8 +70,14 @@ public class StaggeredGridListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView listView = (RecyclerView) view.findViewById(R.id.list_view);
         listView.setAdapter(new StaggeredGridListAdapter(this.columnWidth, this.columnCount, args.getIsHorizontal()));
-        listView.setLayoutManager(new StaggeredGridLayoutManager(this.columnCount,
-                args.getIsHorizontal() ? StaggeredGridLayoutManager.HORIZONTAL : StaggeredGridLayoutManager.VERTICAL));
+
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(this.columnCount,
+                args.getIsHorizontal() ? StaggeredGridLayoutManager.HORIZONTAL : StaggeredGridLayoutManager.VERTICAL);
+
+        //androidx.recyclerview.widget.StaggeredGridLayoutManager.GAP_HANDLING_NONE 会在布局方向改变的时候，禁用重新摆方列表项视图
+        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+
+        listView.setLayoutManager(layoutManager);
         listView.addItemDecoration(new CommonItemDecoration(this.gap, this.edgeGap));
     }
 }
