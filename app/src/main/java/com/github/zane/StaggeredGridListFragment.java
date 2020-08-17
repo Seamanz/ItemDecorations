@@ -1,6 +1,7 @@
 package com.github.zane;
 
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -78,6 +79,6 @@ public class StaggeredGridListFragment extends Fragment {
         layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
 
         listView.setLayoutManager(layoutManager);
-        listView.addItemDecoration(new CommonItemDecoration(this.gap, this.edgeGap));
+        listView.addItemDecoration(new CommonItemDecoration(this.gap, this.edgeGap, Color.GREEN));
     }
 }

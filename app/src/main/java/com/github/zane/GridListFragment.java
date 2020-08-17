@@ -1,5 +1,6 @@
 package com.github.zane;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,7 +56,7 @@ public class GridListFragment extends Fragment {
             view.addItemDecoration(oldDecoration); //旧实现
 
         } else {
-            view.addItemDecoration(new CommonItemDecoration(this.gap, this.edgeGap));
+            view.addItemDecoration(new CommonItemDecoration(this.gap, this.edgeGap, Color.GREEN));
         }
     }
 }

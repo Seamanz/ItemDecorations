@@ -1,11 +1,14 @@
 package com.github.zane.itemdecorations;
 
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.Px;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -21,13 +24,16 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
  */
 public class CommonItemDecoration extends RecyclerView.ItemDecoration {
 
+    private final Rect mBounds = new Rect();
     @Px
-    private final int gapSize;
+    private final int mGapSize;
     @Px
-    private final int edgeGapSize;
+    private final int mEdgeGapSize;
     @ColorInt
-    private final int gapColor;
-    private final double ratio;
+    private final int mGapColor;
+    private final double mRatio;
+    @Nullable
+    private ColorDrawable mDivider;
 
     public CommonItemDecoration(@Px int gapSize) {
         this(gapSize, 0);
@@ -44,10 +50,58 @@ public class CommonItemDecoration extends RecyclerView.ItemDecoration {
         if (gapSize <= 0) {
             throw new IllegalArgumentException("gapSize must be greater than 0 !");
         }
-        this.gapSize = gapSize;
-        this.edgeGapSize = edgeGapSize;
-        this.gapColor = gapColor;
-        this.ratio = (edgeGapSize * 1.0) / (gapSize * 1.0);
+        this.mGapSize = gapSize;
+        this.mEdgeGapSize = edgeGapSize;
+        this.mGapColor = gapColor;
+        this.mRatio = (edgeGapSize * 1.0) / (gapSize * 1.0);
+
+        if (this.mGapColor != Color.TRANSPARENT) {
+            mDivider = new ColorDrawable(this.mGapColor);
+        }
+    }
+
+    @Override
+    public void onDraw(@NonNull Canvas c, RecyclerView parent, @NonNull RecyclerView.State state) {
+        RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
+        if (this.mDivider == null || !isSupportLayout(layoutManager)) {
+            return;
+        }
+
+        drawDivider(c, parent);
+    }
+
+    private boolean isSupportLayout(RecyclerView.LayoutManager layoutManager) {
+        if (layoutManager instanceof StaggeredGridLayoutManager) {
+            return true;
+        } else if (layoutManager instanceof GridLayoutManager) {
+            return true;
+        } else return layoutManager instanceof LinearLayoutManager;
+    }
+
+    private void drawDivider(Canvas canvas, RecyclerView parent) {
+        if (mDivider == null) {
+            return;
+        }
+        canvas.save();
+        final int childCount = parent.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            final View child = parent.getChildAt(i);
+            parent.getDecoratedBoundsWithMargins(child, mBounds);
+            //View left side
+            mDivider.setBounds(mBounds.left, mBounds.top, child.getLeft(), mBounds.bottom);
+            mDivider.draw(canvas);
+            //View right side
+            mDivider.setBounds(child.getRight(), mBounds.top, mBounds.right, mBounds.bottom);
+            mDivider.draw(canvas);
+            //View top side
+            mDivider.setBounds(mBounds.left, mBounds.top, mBounds.right, child.getTop());
+            mDivider.draw(canvas);
+            //View bottom size
+            mDivider.setBounds(mBounds.left, child.getBottom(), mBounds.right, mBounds.bottom);
+            mDivider.draw(canvas);
+
+        }
+        canvas.restore();
     }
 
     @Override
@@ -85,35 +139,35 @@ public class CommonItemDecoration extends RecyclerView.ItemDecoration {
         int left, top, right, bottom;
 
         if (layoutManager.getOrientation() == LinearLayoutManager.VERTICAL) {
-            left = this.edgeGapSize;
-            right = this.edgeGapSize;
+            left = this.mEdgeGapSize;
+            right = this.mEdgeGapSize;
 
             if (position == 0) {
-                top = this.edgeGapSize;
+                top = this.mEdgeGapSize;
             } else {
                 top = 0;
             }
 
             if (position == itemCount - 1) {
-                bottom = this.edgeGapSize;
+                bottom = this.mEdgeGapSize;
             } else {
-                bottom = this.gapSize;
+                bottom = this.mGapSize;
             }
 
         } else {
-            top = this.edgeGapSize;
-            bottom = this.edgeGapSize;
+            top = this.mEdgeGapSize;
+            bottom = this.mEdgeGapSize;
 
             if (position == 0) {
-                left = this.edgeGapSize;
+                left = this.mEdgeGapSize;
             } else {
                 left = 0;
             }
 
             if (position == itemCount - 1) {
-                right = this.edgeGapSize;
+                right = this.mEdgeGapSize;
             } else {
-                right = this.gapSize;
+                right = this.mGapSize;
             }
         }
 
@@ -195,21 +249,21 @@ public class CommonItemDecoration extends RecyclerView.ItemDecoration {
         //Left = Ratio*GapSize - ColumnIndex*Delta
         //Right = Ratio*GapSize - (ColumnCount-(ColumnIndex+1))*Delta
 
-        final double delta = (2 * ratio - 1) * this.gapSize / columnCount; //递增量
-        outRect.left = (int) (this.edgeGapSize - columnIndex * delta);
-        outRect.right = (int) (this.edgeGapSize - (columnCount - (columnIndex + 1)) * delta);
+        final double delta = (2 * mRatio - 1) * this.mGapSize / columnCount; //递增量
+        outRect.left = (int) (this.mEdgeGapSize - columnIndex * delta);
+        outRect.right = (int) (this.mEdgeGapSize - (columnCount - (columnIndex + 1)) * delta);
 
         if (isFirstRow(columnCount, itemPosition)) { //第一行
-            outRect.top = this.edgeGapSize;
+            outRect.top = this.mEdgeGapSize;
         } else {
             outRect.top = 0;
         }
 
         //最后一行(注：这个算法不适用交错布局)
         if (!isStaggered && isLastRow(itemCount, columnCount, itemPosition)) {
-            outRect.bottom = this.edgeGapSize;
+            outRect.bottom = this.mEdgeGapSize;
         } else {
-            outRect.bottom = this.gapSize;
+            outRect.bottom = this.mGapSize;
         }
     }
 
@@ -221,21 +275,21 @@ public class CommonItemDecoration extends RecyclerView.ItemDecoration {
                                                boolean isRtl,
                                                boolean isStaggered) {
 
-        final double delta = (2 * ratio - 1) * this.gapSize / columnCount; //递增量
-        outRect.top = (int) (this.edgeGapSize - columnIndex * delta);
-        outRect.bottom = (int) (this.edgeGapSize - (columnCount - (columnIndex + 1)) * delta);
+        final double delta = (2 * mRatio - 1) * this.mGapSize / columnCount; //递增量
+        outRect.top = (int) (this.mEdgeGapSize - columnIndex * delta);
+        outRect.bottom = (int) (this.mEdgeGapSize - (columnCount - (columnIndex + 1)) * delta);
 
         if (isFirstRow(columnCount, itemPosition)) { //第一列
-            outRect.left = this.edgeGapSize;
+            outRect.left = this.mEdgeGapSize;
         } else {
             outRect.left = 0;
         }
 
         //最后一列(注：这个算法不适用交错布局)
         if (!isStaggered && isLastRow(itemCount, columnCount, itemPosition)) {
-            outRect.right = this.edgeGapSize;
+            outRect.right = this.mEdgeGapSize;
         } else {
-            outRect.right = this.gapSize;
+            outRect.right = this.mGapSize;
         }
 
         if (isRtl) {

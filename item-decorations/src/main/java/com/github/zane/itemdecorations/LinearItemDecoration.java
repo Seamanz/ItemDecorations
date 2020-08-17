@@ -12,11 +12,11 @@ import org.zane.commonutils.DimenUtils;
 
 public class LinearItemDecoration extends RecyclerView.ItemDecoration {
 
-    private final int dividerGap; //主轴方向中间间距
-    private final int mainAxisStartGap; //主轴方向开始间距
-    private final int mainAxisEndGap; //主轴方向结束间距
-    private final int crossAxisStartGap; //交叉轴方向开始间距
-    private final int crossAxisEndGap; //交叉轴方向结束间距
+    private final int mDividerGap; //主轴方向中间间距
+    private final int mMainAxisStartGap; //主轴方向开始间距
+    private final int mMainAxisEndGap; //主轴方向结束间距
+    private final int mCrossAxisStartGap; //交叉轴方向开始间距
+    private final int mCrossAxisEndGap; //交叉轴方向结束间距
 
     public LinearItemDecoration(int dividerGap,
                                 int mainAxisStartGap,
@@ -35,17 +35,17 @@ public class LinearItemDecoration extends RecyclerView.ItemDecoration {
             int crossAxisEndGap,
             boolean isDpUnit) {
         if (isDpUnit) {
-            this.dividerGap = DimenUtils.dp2px(dividerGap);
-            this.mainAxisStartGap = DimenUtils.dp2px(mainAxisStartGap);
-            this.mainAxisEndGap = DimenUtils.dp2px(mainAxisEndGap);
-            this.crossAxisStartGap = DimenUtils.dp2px(crossAxisStartGap);
-            this.crossAxisEndGap = DimenUtils.dp2px(crossAxisEndGap);
+            this.mDividerGap = DimenUtils.dp2px(dividerGap);
+            this.mMainAxisStartGap = DimenUtils.dp2px(mainAxisStartGap);
+            this.mMainAxisEndGap = DimenUtils.dp2px(mainAxisEndGap);
+            this.mCrossAxisStartGap = DimenUtils.dp2px(crossAxisStartGap);
+            this.mCrossAxisEndGap = DimenUtils.dp2px(crossAxisEndGap);
         } else {
-            this.dividerGap = dividerGap;
-            this.mainAxisStartGap = mainAxisStartGap;
-            this.mainAxisEndGap = mainAxisEndGap;
-            this.crossAxisStartGap = crossAxisStartGap;
-            this.crossAxisEndGap = crossAxisEndGap;
+            this.mDividerGap = dividerGap;
+            this.mMainAxisStartGap = mainAxisStartGap;
+            this.mMainAxisEndGap = mainAxisEndGap;
+            this.mCrossAxisStartGap = crossAxisStartGap;
+            this.mCrossAxisEndGap = crossAxisEndGap;
         }
     }
 
@@ -116,41 +116,41 @@ public class LinearItemDecoration extends RecyclerView.ItemDecoration {
 
             if (layoutManager.getOrientation() == RecyclerView.HORIZONTAL) {
 
-                top = this.crossAxisStartGap;
-                bottom = this.crossAxisEndGap;
+                top = this.mCrossAxisStartGap;
+                bottom = this.mCrossAxisEndGap;
 
                 if (isRtl) {
 
                     if (position == itemCount - 1) {
-                        left = this.mainAxisEndGap;
+                        left = this.mMainAxisEndGap;
                     } else {
-                        left = this.dividerGap;
+                        left = this.mDividerGap;
                     }
 
                     if (position == 0) {
-                        right = this.mainAxisStartGap;
+                        right = this.mMainAxisStartGap;
                     } else {
                         right = 0;
                     }
 
                 } else {
                     if (position == 0) {
-                        left = this.mainAxisStartGap;
+                        left = this.mMainAxisStartGap;
                     } else {
                         left = 0;
                     }
 
-                    right = this.dividerGap;
+                    right = this.mDividerGap;
 
                     if (position == itemCount - 1) {
-                        right = this.mainAxisEndGap;
+                        right = this.mMainAxisEndGap;
                     }
                 }
 
             } else {
 
-                left = this.crossAxisStartGap;
-                right = this.crossAxisEndGap;
+                left = this.mCrossAxisStartGap;
+                right = this.mCrossAxisEndGap;
 
                 if (isRtl) {
                     int temp = left;
@@ -159,15 +159,15 @@ public class LinearItemDecoration extends RecyclerView.ItemDecoration {
                 }
 
                 if (position == 0) {
-                    top = this.mainAxisStartGap;
+                    top = this.mMainAxisStartGap;
                 } else {
                     top = 0;
                 }
 
-                bottom = this.dividerGap;
+                bottom = this.mDividerGap;
 
                 if (position == itemCount - 1) {
-                    bottom = this.mainAxisEndGap;
+                    bottom = this.mMainAxisEndGap;
                 }
 
             }
