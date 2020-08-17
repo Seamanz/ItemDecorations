@@ -1,5 +1,17 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
+
+    ext {
+        site_url = 'https://github.com/Zane-Inspiration/ItemDecorations'
+        git_url = "${site_url}.git"
+        issue_tracker_url = "${site_url}/issues"
+        group_id = 'com.github.zane.itemdecorations'
+        artifact_Id = 'item-decorations'
+        artifact_description = 'Android RecyclerView item decoration'
+        version_name = '0.0.1'
+        version_code = 1
+    }
+
     repositories {
         google()
         jcenter()
@@ -7,6 +19,8 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:4.0.1"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.3.0"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -17,8 +31,20 @@ allprojects {
         google()
         jcenter()
     }
+    initLocalProperties()
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+def initLocalProperties() {
+    File file = rootProject.file('local.properties')
+    if (file.exists()) {
+        InputStream inputStream = rootProject.file('local.properties').newDataInputStream();
+        Properties properties = new Properties()
+        properties.load(inputStream)
+        ext.bintray_user = properties.getProperty("BINTRAY_USER")
+        ext.bintray_api_key = properties.getProperty("BINTRAY_API_KEY")
+    }
 }
