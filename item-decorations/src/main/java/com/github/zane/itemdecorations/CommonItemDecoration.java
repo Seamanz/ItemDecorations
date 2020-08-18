@@ -17,10 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 /**
- * 算法:<br/>
- * 中间间隔 GapSize, 四围间隔 EdgeGapSize, 列数 ColumnCount, 列索引 ColumnIndex, 比例 Ratio=EdgeGapSize/GapSize, 递增量 Delta=(2*Ratio-1)*GapSize/ColumnCount<br/>
- * Left = Ratio*GapSize - ColumnIndex*Delta <br/>
- * Right = Ratio*GapSize - (ColumnCount-(ColumnIndex+1))*Delta <br/>
+ * 算法:
+ * 中间间隔 GapSize, 四围间隔 EdgeGapSize, 列数 ColumnCount, 列索引 ColumnIndex, 比例 Ratio=EdgeGapSize/GapSize, 递增量 Delta=(2*Ratio-1)*GapSize/ColumnCount
+ * Left = Ratio*GapSize - ColumnIndex*Delta
+ * Right = Ratio*GapSize - (ColumnCount-(ColumnIndex+1))*Delta
  */
 public class CommonItemDecoration extends RecyclerView.ItemDecoration {
 
