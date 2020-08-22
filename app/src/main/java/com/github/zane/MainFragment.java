@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements View.OnClickListener {
 
 
     public MainFragment() {
@@ -27,30 +27,48 @@ public class MainFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        view.findViewById(R.id.btn_grid_list).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        view.findViewById(R.id.btn_list_vertical).setOnClickListener(this);
+        view.findViewById(R.id.btn_list_horizontal).setOnClickListener(this);
+        view.findViewById(R.id.btn_grid_list).setOnClickListener(this);
+        view.findViewById(R.id.btn_grid_list_horizontal).setOnClickListener(this);
+        view.findViewById(R.id.btn_staggered_grid_list).setOnClickListener(this);
+        view.findViewById(R.id.btn_staggered_grid_list2).setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_list_vertical:
+                NavHostFragment.findNavController(this)
+                        .navigate(MainFragmentDirections
+                                .actionMainPageToListPage().setIsVertical(true));
+                break;
+
+            case R.id.btn_list_horizontal:
+                NavHostFragment.findNavController(this)
+                        .navigate(MainFragmentDirections
+                                .actionMainPageToListPage().setIsVertical(false));
+                break;
+
+            case R.id.btn_grid_list:
                 NavHostFragment.findNavController(MainFragment.this)
                         .navigate(R.id.action_mainPage_to_gridListPage);
-            }
-        });
+                break;
 
-        view.findViewById(R.id.btn_staggered_grid_list).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            case R.id.btn_grid_list_horizontal:
+                break;
+
+            case R.id.btn_staggered_grid_list:
                 NavHostFragment.findNavController(MainFragment.this)
                         .navigate(R.id.action_mainPage_to_staggeredGridListPage);
-            }
-        });
+                break;
 
-        view.findViewById(R.id.btn_staggered_grid_list2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            case R.id.btn_staggered_grid_list2:
                 NavHostFragment.findNavController(MainFragment.this)
                         .navigate(MainFragmentDirections
                                 .actionMainPageToStaggeredGridListPage()
                                 .setIsHorizontal(true));
-            }
-        });
+                break;
+        }
     }
 }

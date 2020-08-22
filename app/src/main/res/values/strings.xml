@@ -5,5 +5,8 @@
     <string name="staggered_grid_list2">Staggered Grid List2</string>
     <string name="switch_rtl" translatable="false">Switch_RTL</string>
     <string name="about">About</string>
+    <string name="vertical_list">Vertical List</string>
+    <string name="horizontal_list">Horizontal List</string>
+    <string name="grid_list_horizontal">Horizontal Grid List</string>
 
 </resources>

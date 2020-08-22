@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_mainPage_to_staggeredGridListPage"
             app:destination="@id/staggeredGridListPage" />
+        <action
+            android:id="@+id/action_mainPage_to_listPage"
+            app:destination="@id/listPage" />
     </fragment>
     <fragment
         android:id="@+id/gridListPage"
@@ -24,10 +27,19 @@
     <fragment
         android:id="@+id/staggeredGridListPage"
         android:name="com.github.zane.StaggeredGridListFragment"
-        android:label="@string/staggered_grid_list" >
+        android:label="@string/staggered_grid_list">
         <argument
             android:name="is_horizontal"
             app:argType="boolean"
             android:defaultValue="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/listPage"
+        android:name="com.github.zane.ListFragment"
+        android:label="ListPage">
+        <argument
+            android:name="isVertical"
+            app:argType="boolean"
+            android:defaultValue="true" />
     </fragment>
 </navigation>

@@ -7,20 +7,38 @@
     tools:context=".MainFragment">
 
     <Button
+        android:id="@+id/btn_list_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/vertical_list" />
+
+    <Button
+        android:id="@+id/btn_list_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/horizontal_list" />
+
+    <Button
         android:id="@+id/btn_grid_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/grid_list"/>
+        android:text="@string/grid_list" />
+
+    <Button
+        android:id="@+id/btn_grid_list_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/grid_list_horizontal" />
 
     <Button
         android:id="@+id/btn_staggered_grid_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/staggered_grid_list"/>
+        android:text="@string/staggered_grid_list" />
 
     <Button
         android:id="@+id/btn_staggered_grid_list2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/staggered_grid_list2"/>
+        android:text="@string/staggered_grid_list2" />
 </LinearLayout>
