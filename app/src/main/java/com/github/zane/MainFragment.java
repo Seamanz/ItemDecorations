@@ -12,7 +12,6 @@ import androidx.navigation.fragment.NavHostFragment;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
 
-
     public MainFragment() {
         // Required empty public constructor
     }
@@ -56,6 +55,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.btn_grid_list_horizontal:
+                NavHostFragment.findNavController(MainFragment.this)
+                        .navigate(R.id.action_mainPage_to_horizontalGridListPage);
                 break;
 
             case R.id.btn_staggered_grid_list:

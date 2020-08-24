@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_mainPage_to_listPage"
             app:destination="@id/listPage" />
+        <action
+            android:id="@+id/action_mainPage_to_horizontalGridListPage"
+            app:destination="@id/horizontalGridListPage" />
     </fragment>
     <fragment
         android:id="@+id/gridListPage"
@@ -42,4 +45,8 @@
             app:argType="boolean"
             android:defaultValue="true" />
     </fragment>
+    <fragment
+        android:id="@+id/horizontalGridListPage"
+        android:name="com.github.zane.HorizontalGridListFragment"
+        android:label="HorizontalGridListPage" />
 </navigation>
