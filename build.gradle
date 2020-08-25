@@ -8,8 +8,8 @@ buildscript {
         group_id = 'com.github.zane.itemdecorations'
         artifact_Id = 'item-decorations'
         artifact_description = 'Android RecyclerView item decoration'
-        version_name = '0.0.1'
-        version_code = 1
+        version_name = '0.0.2'
+        version_code = 2
     }
 
     repositories {
