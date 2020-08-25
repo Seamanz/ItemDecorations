@@ -243,15 +243,8 @@ public class CommonItemDecoration extends RecyclerView.ItemDecoration {
                                              int itemPosition,
                                              boolean isStaggered
     ) {
-        //算法:
-        //中间间隔 GapSize, 四围间隔 EdgeGapSize, 列数 ColumnCount, 列索引 ColumnIndex,
-        //比例 Ratio=EdgeGapSize/GapSize, 递增量 Delta=(2*Ratio-1)*GapSize/ColumnCount
-        //Left = Ratio*GapSize - ColumnIndex*Delta
-        //Right = Ratio*GapSize - (ColumnCount-(ColumnIndex+1))*Delta
 
-        final double delta = (2 * mRatio - 1) * this.mGapSize / columnCount; //递增量
-        outRect.left = (int) (this.mEdgeGapSize - columnIndex * delta);
-        outRect.right = (int) (this.mEdgeGapSize - (columnCount - (columnIndex + 1)) * delta);
+        setupCrossAxisOffsets(outRect, mGapSize, mEdgeGapSize, mRatio, columnCount, columnIndex, true);
 
         if (isFirstRow(columnCount, itemPosition)) { //第一行
             outRect.top = this.mEdgeGapSize;
@@ -275,9 +268,7 @@ public class CommonItemDecoration extends RecyclerView.ItemDecoration {
                                                boolean isRtl,
                                                boolean isStaggered) {
 
-        final double delta = (2 * mRatio - 1) * this.mGapSize / columnCount; //递增量
-        outRect.top = (int) (this.mEdgeGapSize - columnIndex * delta);
-        outRect.bottom = (int) (this.mEdgeGapSize - (columnCount - (columnIndex + 1)) * delta);
+        setupCrossAxisOffsets(outRect, mGapSize, mEdgeGapSize, mRatio, columnCount, columnIndex, false);
 
         if (isFirstRow(columnCount, itemPosition)) { //第一列
             outRect.left = this.mEdgeGapSize;
@@ -296,6 +287,34 @@ public class CommonItemDecoration extends RecyclerView.ItemDecoration {
             int left = outRect.left;
             outRect.left = outRect.right;
             outRect.right = left;
+        }
+    }
+
+    /**
+     * Setup Cross Axis Offsets
+     */
+    public static void setupCrossAxisOffsets(
+            Rect outRect,
+            int pGapSize,
+            int pEdgeGapSize,
+            double pRatio,
+            int pColumnCount,
+            int pColumnIndex,
+            boolean pIsVerticalList) {
+        //算法:
+        //中间间隔 GapSize, 四围间隔 EdgeGapSize, 列数 ColumnCount, 列索引 ColumnIndex,
+        //比例 Ratio=EdgeGapSize/GapSize, 递增量 Delta=(2*Ratio-1)*GapSize/ColumnCount
+        //Left = Ratio*GapSize - ColumnIndex*Delta
+        //Right = Ratio*GapSize - (ColumnCount-(ColumnIndex+1))*Delta
+        final double delta = (2 * pRatio - 1) * pGapSize / pColumnCount; //递增量
+        final int offset1 = (int) (pEdgeGapSize - pColumnIndex * delta);
+        final int offset2 = (int) (pEdgeGapSize - (pColumnCount - (pColumnIndex + 1)) * delta);
+        if (pIsVerticalList) {
+            outRect.left = offset1;
+            outRect.right = offset2;
+        } else {
+            outRect.top = offset1;
+            outRect.bottom = offset2;
         }
     }
 }
