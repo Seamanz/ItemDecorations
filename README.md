@@ -3,11 +3,11 @@
 RecyclerView ItemDecoration
 
 ### LinearLayoutManager
-![LinearLayoutManager-sample.gif](images/LinearLayoutManager-sample.gif)
+![LinearLayoutManager-sample.gif](images/LinearLayoutManager-sample.gif =540x960)
 ### GridLayoutManager
-![GridLayoutManager-sample.gif](images/GridLayoutManager-sample.gif)
+![GridLayoutManager-sample.gif](images/GridLayoutManager-sample.gif =540x960)
 ### StaggeredGridLayoutManager
-![StaggeredGridLayoutManager-sample.gif](images/StaggeredGridLayoutManager-sample.gif)
+![StaggeredGridLayoutManager-sample.gif](images/StaggeredGridLayoutManager-sample.gif =540x960)
 
 # Installation
 To get a Git project into your build:
